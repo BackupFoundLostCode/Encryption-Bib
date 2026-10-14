@@ -41,7 +41,7 @@ inline void bit_to_ascii(const std::vector<std::bitset<8>> &textInBit) {
         std::cout << static_cast<char>(i.to_ullong());
     }
 }
-//Die meode fintioniert rtmal allerdings garstiert es mit nivht das die zahlen wriklich zufall sind und die kontrolle scheinbar auch nict erstmal aber nicht wild.
+
 inline int real_random_numbers() {
 
     int result = {};
@@ -51,7 +51,7 @@ inline int real_random_numbers() {
         std::cout << "KEIN ECHTER ZUFALL AUF DEM SYSTEM MÖGLICH!" << std::endl;
         return 404;
     }
-    std::uniform_int_distribution<int> myBit (0,1);//Bereiche festlegen zwischen 0 und 1
+    std::uniform_int_distribution<int> myBit (0,1);
     const int zufallswert = myBit(rd);
     result = zufallswert;
 
@@ -69,17 +69,12 @@ inline int rest_big_number(const int number, const int expo, const int modulo) {
 inline bool ggT(const int number, const int modulo) {
     return std::gcd(number, modulo) == 1;
 }
-//
-//
-//ERLEDIGT
+
 namespace affineEncryption {
-    //nur für das alphabet gemacht momentan.
-    //Sollte das mal optimierern das geht sonst nur pro buchtsbae so das der einzeln übernimmt oder so (NOTIZ WENN REST FERTIG UND IN DER MAIN DANN GEBAUT WIRD)
-    inline std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWKYZ";//Damit ich die Indexe mir anschauen kann, habs nach ner woche schon vergessen gehabt, warum und musste ne minute nachdenken, warum das hier steht. Für dich Zukunfts-Ich.
+    inline std::string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWKYZ";
 
 
     inline int affine_Encryption(const int keyA, const int keyB, const int index) {
-        //muss gelten ggt(a,m) = 1, mod = 26 weil alphabet, wenn etwas %Zn dann Ergebnis immer kleiner Zn+1.
         int result = {};
 
         if (ggT(keyA, 26)) {
@@ -94,7 +89,6 @@ namespace affineEncryption {
     }
 
     inline int affine_Decryption(const int keyA, const int keyB, const int index) {
-        // X = a^-1 *(y-b) mod 26, a¹ = a*a^-1 = 1 mod 26
         int result = {};
 
         if (ggT(keyA, 26)) {
@@ -105,11 +99,11 @@ namespace affineEncryption {
             while (run) {
 
                 if ((keyA * reverse) % 26 == 1) {
-                    //reverse sollte an dem punkt a hoch - 1 sein.
-                    int dCrypt = reverse * (index - keyB) % 26;//das ist nur richtig für positive ergebnisse
+                    
+                    int dCrypt = reverse * (index - keyB) % 26;
 
                     if (dCrypt < 0) {
-                        dCrypt =(dCrypt +26) %26;// %26 nochmal um es, wenn es zu groß währe weider in den restklassenring 26 zu überführen, hier aber im grunde sinnlos.
+                        dCrypt =(dCrypt +26) %26;
                     }
                     run = false;
                     result = dCrypt;
@@ -122,10 +116,7 @@ namespace affineEncryption {
         return result;
     }
 }
-//
-//
-//
-//ERLEDIGT
+
 namespace streamCipher  {
 
     inline std::vector<std::bitset<8>> stream_key_OTP(const std::vector<std::bitset<8>> &messageBitLenght) {
@@ -202,7 +193,7 @@ namespace advance {
 
         std::cout << "Das gestezte bitset:" << std::endl;
         for (auto i = 0; i < shiftRegister.size(); i++) {
-            std::cout <<shiftRegister[shiftRegister.size() - 1 -i];//minus 1 und dann minus i weill ich die minus - brauche um auf generell das maximale element zu kommen wegen der ertsen index zahl die ja 0 ist. somit habe ich hier eine länge von 8 ohne -1 komme ich so als erstes auf index 8 den gibts ja nicht. das währe eine länge von 9, nicht 8.
+            std::cout <<shiftRegister[shiftRegister.size() - 1 -i];
         }
 
         std::cout << "\n" << std::endl;
@@ -214,7 +205,7 @@ namespace advance {
             shiftRegister[7]= lastBit2;
 
             for (auto j = 0; j < shiftRegister.size(); j++) {
-                std::cout <<shiftRegister[shiftRegister.size() - 1 -j];//minus 1 und dann minus j weill ich die minus - brauche um auf generell das maximale element zu kommen wegen der ertsen index zahl die ja 0 ist. somit habe ich hier eine länge von 8 ohne -1 komme ich so als erstes auf index 8 den gibts ja nicht. das währe eine länge von 9, nicht 8.
+                std::cout <<shiftRegister[shiftRegister.size() - 1 -j];
             }
             std::cout << "" << std::endl;
         }
@@ -236,23 +227,20 @@ namespace advance {
             shiftRegister[7]= feedback;
 
             for (auto j = 0; j < shiftRegister.size(); j++) {
-                std::cout <<shiftRegister[shiftRegister.size() - 1 -j];//minus 1 und dann minus j weill ich die minus - brauche um auf generell das maximale element zu kommen wegen der ertsen index zahl die ja 0 ist. somit habe ich hier eine länge von 8 ohne -1 komme ich so als erstes auf index 8 den gibts ja nicht. das währe eine länge von 9, nicht 8.
+                std::cout <<shiftRegister[shiftRegister.size() - 1 -j];
             }
             std::cout << "" << std::endl;
         }
     }
 
     namespace trivium {
-        //Generell: mal schauen ob ich die returnarten und auch generell alpassen kann und sollte also alles eiheitlich wenns geht am beten alles bitset.
-        //Ach scheiße ich muss das alles doch auf std::bitset anpassen. Also entwerder pures bitset oder auch vector mit bitset. Sollt das auf bitset<8> anpassen, weil ich das ermal nur für buchstaben machen will ansonsten kann die gelichennochmal schireben aber eben mit einzlenen bools oder bitset mit <1>.
 
-        //Logik ist fertig. Fehlen noch indexe auf bitset anpassenund eventuell ist die c and verknüpfung noch nicht ganz richtig.
         inline std::vector<bool> keystream_trivium_for_ASCII(const std::vector<bool> &message_in_bit) {
             std::bitset<93> a;
             std::bitset<84> b;
             std::bitset<111> c;
-            std::bitset<80> iv_trivium;//80 random bit.
-            std::bitset<80> key;//key sind nur random bits die aber gemerkt werden müssen genauso wie der IV.
+            std::bitset<80> iv_trivium;
+            std::bitset<80> key;
 
             std::cout << "Die register ohne die key und iv bit: " << std::endl;
             std::cout << "A: " << a << " Länge: " << a.size() << std::endl;
@@ -289,15 +277,11 @@ namespace advance {
             std::cout << "Der gefüllte c mit den einsen: " << c << " länge: " << c.size() <<std::endl;
             std::cout << "" << std::endl;
 
-            //Aufwärmphase:
-            //Was in die gatter geschieben wird (indexe dannauch noch an bitset anpassen):  Rückkoblung in a: betweenA = betweenA ^ (a[91]&a[92]) ^ b[78] das wird später in register b geschireben
-            //betweenB = betweenB ^ (b[82]&b[83]) ^ c[87] das wird dann ich register c geschireben
-            //betweenC betweenC ^ (c[108]&c[110]) ^ a[69] das wird in register a geschireben
             for (auto i =0; i < 1152; i++) {
-                //Hier sind die indexe vermutlich nicht korrekt, auch die genrelle rechung glaube ich nicht. DAS IST VERMUTLICH DIE LETZE FEHLERQUELLE!
-                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
+                
+                bool betweenA = a[66]^a[93];
+                bool betweenB = b[69]^b[84] ;
+                bool betweenC = c[66]^c[111];
 
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
@@ -312,12 +296,10 @@ namespace advance {
                 c[110] = insertC;
             }
 
-            //Eigentliochen Keystrem erzeugen:
-            //das ausgabe bit ist: betweenA ^ betweenB ^ betweenC
             for (auto i = 0; i < keystream.size(); i++) {
-                bool betweenA = a[66]^a[93];//indexe noch anpassen, ansich aber richtig
-                bool betweenB = b[69]^b[84] ;//Rechenoperation stimmt erstmal, idexe noch änder warscheinlich noch
-                bool betweenC = c[66]^c[111];//auh hier richtig bis auf die indexe
+                bool betweenA = a[66]^a[93];
+                bool betweenB = b[69]^b[84];
+                bool betweenC = c[66]^c[111];
 
                 bool insertB = betweenA ^ (a[91]&a[92]) ^ b[78];
                 bool insertC = betweenB ^ (b[82]&b[83]) ^ c[87];
@@ -336,9 +318,9 @@ namespace advance {
 
             return keystream;
         }
-        //Void als DT ändern wenn man das ganze intern weiter verarbeiten wollen würde.
+
         inline void entschlusseln_trivium_for_ASII(std::vector<bool> &keystream_trivium, std::vector<std::bitset<8>> &message_in_bit) {
-            //Ist ja nur bit ^ bit also...
+            //Coming Soon
 
         }
 
