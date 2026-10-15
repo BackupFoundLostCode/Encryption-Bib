@@ -1,1 +1,3 @@
+# Encryption Bib in C++
+
 These are my first steps into cryptography. I've looked into the mathematics behind some of the concepts and tried to implement them in C++. I'm aware that some parts are still unfinished or need further refinement.
